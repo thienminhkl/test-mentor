@@ -19,15 +19,27 @@ module.exports = {
     'prettier/prettier': [
       'warn',
       {
-        arrowParens: 'always',
-        semi: false,
-        trailingComma: 'none',
-        tabWidth: 2,
-        endOfLine: 'auto',
-        useTabs: false,
-        singleQuote: true,
-        printWidth: 120,
-        jsxSingleQuote: true
+        "arrowParens": "always",
+        "semi": false,
+        "trailingComma": "none",
+        "tabWidth": 2,
+        "endOfLine": "auto",
+        "useTabs": false,
+        "singleQuote": true,
+        "printWidth": 120,
+        "jsxSingleQuote": true,
+        "bracketSameLine": false,
+        "bracketSpacing": true,
+        "embeddedLanguageFormatting": "auto",
+        "htmlWhitespaceSensitivity": "css",
+        "insertPragma": false,
+        "proseWrap": "preserve",
+        "quoteProps": "as-needed",
+        "requirePragma": false,
+        "singleAttributePerLine": false,
+        "vueIndentScriptAndStyle": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false
       }
     ]
   },
