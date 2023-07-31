@@ -1,7 +1,7 @@
-import { Fragment, lazy } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import HomeTemplate from './templates/HomeTemplate'
-import ScrollToTop from './components/ScrollToTop'
+import { Fragment, lazy } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomeTemplate from './templates/HomeTemplate';
+import ScrollToTop from './components/ScrollToTop';
 //-------------------------------------------------------------------------------
 
 function App() {
@@ -10,17 +10,21 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
-          <Route path='' element={<HomeTemplate />}>
-            <Route index path='projectmanagement' element={<ProjectManagement />}></Route>
-            <Route path='' element={<></>}></Route>
-            <Route path='detail-project/:detailID' element={<></>}></Route>
+          <Route path="login" element={<Login />}></Route>
+          <Route path="" element={<HomeTemplate />}>
+            <Route
+              index
+              path="projectmanagement"
+              element={<ProjectManagement />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
     </Fragment>
-  )
+  );
 }
 
-export default App
+export default App;
 
-const ProjectManagement = lazy(() => import('./pages/ProjectManagement'))
+const ProjectManagement = lazy(() => import('./pages/ProjectManagement'));
+const Login = lazy(() => import('./pages/Login'));
