@@ -1,5 +1,6 @@
 //react
-import { Suspense, useState } from 'react'
+import { Suspense, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 //@mui
 import {
   Add,
@@ -13,8 +14,8 @@ import {
   Article,
   NearMe,
   AllInbox,
-  Queue
-} from '@mui/icons-material'
+  Queue,
+} from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -27,80 +28,87 @@ import {
   ListItemText,
   Drawer as MuiDrawer,
   Stack,
-  Typography
-} from '@mui/material'
-import { CSSObject, styled } from '@mui/material/styles'
-import { Outlet } from 'react-router-dom'
-import { SideBar } from '~/type/sidebar.type'
-import LoadingScreen from '~/components/LoadingScreen'
+  Typography,
+} from '@mui/material';
+import { CSSObject, styled } from '@mui/material/styles';
+//type
+import { SideBar } from '~/type/sidebar.type';
+//component
+import LoadingScreen from '~/components/LoadingScreen';
 //-------------------------------------------------------------------------------
-const drawerWidth = 200
+const drawerWidth = 200;
 
 const openedMixin = (): CSSObject => ({
   width: drawerWidth,
   backgroundColor: '#071e51',
   color: 'white',
-  overflowX: 'hidden'
-})
+  overflowX: 'hidden',
+});
 
 const closedMixin = (): CSSObject => ({
   overflowX: 'hidden',
   backgroundColor: '#071e51',
   color: 'white',
-  width: 50
-})
+  width: 50,
+});
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1)
-}))
+  padding: theme.spacing(0, 1),
+}));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ open }) => ({
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ open }) => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
   ...(open && {
     ...openedMixin(),
-    '& .MuiDrawer-paper': openedMixin()
+    '& .MuiDrawer-paper': openedMixin(),
   }),
   ...(!open && {
     ...closedMixin(),
-    '& .MuiDrawer-paper': closedMixin()
-  })
-}))
+    '& .MuiDrawer-paper': closedMixin(),
+  }),
+}));
 
 const listSidebar: SideBar[] = [
   { name: 'Create Task', icon: <Add />, href: '/' },
-  { name: 'Search', icon: <Search />, href: '/' }
-]
+  { name: 'Search', icon: <Search />, href: '/' },
+];
 const listSubSidebarU: SideBar[] = [
   { name: 'Cyber Board', icon: <CreditCard />, href: '/' },
-  { name: 'Project Management', icon: <Settings />, href: '/' },
-  { name: 'Create Project', icon: <Queue />, href: '/' }
-]
+  {
+    name: 'Project Management',
+    icon: <Settings />,
+    href: '/projectmanagement',
+  },
+  { name: 'Create Project', icon: <Queue />, href: '/createProject' },
+];
 const listSubSidebarL: SideBar[] = [
   { name: 'Releases', icon: <LocalShipping />, href: '/' },
   { name: 'Issue and filters', icon: <DensityLarge />, href: '/' },
   { name: 'Pages', icon: <Article />, href: '/' },
   { name: 'Report', icon: <NearMe />, href: '/' },
-  { name: 'Components', icon: <AllInbox />, href: '/' }
-]
+  { name: 'Components', icon: <AllInbox />, href: '/' },
+];
 
 //----------------------------------------------------------------------------
 function HomeTemplate() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <Drawer variant='permanent' open={open}>
+      <Drawer variant="permanent" open={open}>
         <DrawerHeader
           sx={{
             minHeight: 48,
             justifyContent: open ? 'right' : 'center',
-            px: 2.5
+            px: 2.5,
           }}
         >
           <IconButton sx={{ color: 'white' }} onClick={() => setOpen(!open)}>
@@ -115,15 +123,16 @@ function HomeTemplate() {
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
-                  px: 2.5
+                  px: 2.5,
                 }}
+                href={i.href}
               >
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
-                    color: 'white'
+                    color: 'white',
                   }}
                 >
                   {i.icon}
@@ -135,24 +144,24 @@ function HomeTemplate() {
         </List>
       </Drawer>
 
-      <Box component='main' sx={{ flexGrow: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
         <Box sx={{ display: 'flex' }}>
           <Drawer
-            variant='permanent'
+            variant="permanent"
             open
             sx={{
               '& .MuiDrawer-paper': {
                 height: '100%',
                 backgroundColor: '#e7e7e7',
                 color: 'black',
-                ml: `${open ? '200px' : '50px'}`
-              }
+                ml: `${open ? '200px' : '50px'}`,
+              },
             }}
           >
             <Stack alignItems={'center'} m={3} spacing={2} direction={'row'}>
-              <Avatar src='/logoCyber.png' />
+              <Avatar src="/logoCyber.png" />
               <Stack spacing={1}>
-                <Typography variant='h5'>CyberLearn.vn</Typography>
+                <Typography variant="h5">CyberLearn.vn</Typography>
                 <Typography>Report bugs</Typography>
               </Stack>
             </Stack>
@@ -163,14 +172,15 @@ function HomeTemplate() {
                     sx={{
                       minHeight: 48,
                       justifyContent: 'center',
-                      px: 2.5
+                      px: 2.5,
                     }}
+                    href={i.href}
                   >
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
                         mr: 3,
-                        justifyContent: 'center'
+                        justifyContent: 'center',
                       }}
                     >
                       {i.icon}
@@ -188,14 +198,15 @@ function HomeTemplate() {
                     sx={{
                       minHeight: 48,
                       justifyContent: 'center',
-                      px: 2.5
+                      px: 2.5,
                     }}
+                    href={i.href}
                   >
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
                         mr: 3,
-                        justifyContent: 'center'
+                        justifyContent: 'center',
                       }}
                     >
                       {i.icon}
@@ -206,7 +217,7 @@ function HomeTemplate() {
               ))}
             </List>
           </Drawer>
-          <Box component='main' sx={{ flexGrow: 1, p: 2 }}>
+          <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
             <Suspense fallback={<LoadingScreen />}>
               <Outlet />
             </Suspense>
@@ -214,7 +225,7 @@ function HomeTemplate() {
         </Box>
       </Box>
     </Box>
-  )
+  );
 }
 
-export default HomeTemplate
+export default HomeTemplate;

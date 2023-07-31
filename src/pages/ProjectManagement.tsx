@@ -27,6 +27,8 @@ import { CYBERTOKEN } from '~/hooks/const';
 //component
 import ProjectAddMemberPopup from '~/components/ProjectAddMemberPopup';
 import ProjectMemberPopup from '~/components/ProjectMemberPopup';
+import { dispatch } from '~/redux/store';
+import { handleGetListProjects } from '~/redux/slices/projectSlides';
 
 //-------------------------------------------------------------------------------
 interface Column {

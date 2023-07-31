@@ -17,6 +17,9 @@ function App() {
               path="projectmanagement"
               element={<ProjectManagement />}
             />
+            <Route path="release" element={<Release />} />
+            <Route path="createProject" element={<CreateProject />} />
+            <Route path="editProject:id" element={<EditProject />} />
           </Route>
         </Routes>
       </BrowserRouter>
@@ -28,3 +31,6 @@ export default App;
 
 const ProjectManagement = lazy(() => import('./pages/ProjectManagement'));
 const Login = lazy(() => import('./pages/Login'));
+const CreateProject = lazy(() => import('./pages/CreateProject'));
+const EditProject = lazy(() => import('./pages/EditProject'));
+const Release = lazy(() => import('./pages/Release'));
