@@ -117,7 +117,7 @@ export default function ProjectManagement() {
   };
 
   return (
-    <>
+    <Stack m={2}>
       <Stack>
         <Typography variant="h3">Project Management</Typography>
       </Stack>
@@ -133,7 +133,7 @@ export default function ProjectManagement() {
         </Button>
       </Stack>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 600 }}>
+        <TableContainer sx={{ maxHeight: 550 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -204,6 +204,6 @@ export default function ProjectManagement() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </>
+    </Stack>
   );
 }

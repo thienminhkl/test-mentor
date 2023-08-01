@@ -99,7 +99,7 @@ export function handleGetProjectDetail(
   return async (dispatch: any) => {   
     try {
       const resp = await axios({
-        url: `/api/Project/getProjectDetail?id=${id}`,
+        url: `https://jiranew.cybersoft.edu.vn/api/Project/getProjectDetail?id=${id}`,
         method: 'get',
         headers: {
           TokenCybersoft: ` ${CYBERTOKEN}`,

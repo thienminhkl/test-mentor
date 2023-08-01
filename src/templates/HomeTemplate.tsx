@@ -1,6 +1,6 @@
 //react
-import { Suspense, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Suspense, useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 //@mui
 import {
   Add,
@@ -19,6 +19,7 @@ import {
 import {
   Avatar,
   Box,
+  Button,
   Divider,
   IconButton,
   List,
@@ -35,6 +36,9 @@ import { CSSObject, styled } from '@mui/material/styles';
 import { SideBar } from '~/type/sidebar.type';
 //component
 import LoadingScreen from '~/components/LoadingScreen';
+import { useSelector } from 'react-redux';
+import { RootState, dispatch } from '~/redux/store';
+import { logout } from '~/redux/slices/userSlides';
 //-------------------------------------------------------------------------------
 const drawerWidth = 200;
 
@@ -100,6 +104,15 @@ const listSubSidebarL: SideBar[] = [
 //----------------------------------------------------------------------------
 function HomeTemplate() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isLoggedIn } = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -216,8 +229,18 @@ function HomeTemplate() {
                 </ListItem>
               ))}
             </List>
+            <Stack mt={10} alignItems={'center'}>
+              <Button
+                sx={{ width: 50 }}
+                variant="contained"
+                href="/login"
+                onClick={() => dispatch(logout())}
+              >
+                Logout
+              </Button>
+            </Stack>
           </Drawer>
-          <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
+          <Box component="main" sx={{ flexGrow: 1 }}>
             <Suspense fallback={<LoadingScreen />}>
               <Outlet />
             </Suspense>
