@@ -56,7 +56,7 @@ export default function ProjectAddMemberPopup({ listUser, projId }: Props) {
         });
         console.log(resp);
       } catch (error: any) {
-        console.error(error);
+        alert(error.response.data.message);
       }
     }
   };
