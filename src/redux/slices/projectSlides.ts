@@ -7,6 +7,7 @@ import { getLocal, setLocal } from '~/hooks/localStogate';
 //type
 import { Category } from '~/type/category.type';
 import { CreateProject, Projects, UpdateProject } from '~/type/projects.type';
+import { User } from '~/type/user.type';
 //------------------------------------------------------
 
 interface ProjectList{
@@ -30,25 +31,35 @@ const slice = createSlice({
     state.listProjects = action.payload
    },
    delProject(state, action){
-    const indexById = state.listProjects.findIndex((proj) => proj.id === action.payload);
-    state.listProjects.splice(indexById, 1)
+    const IndexProj = state.listProjects.findIndex((proj) => proj.id === action.payload);
+    state.listProjects.splice(IndexProj, 1)
     setLocal('list_project', state.listProjects)
    },
    setProjectCategory(state, action){
     state.projectCategory = action.payload
    },
    updateProject(state, action){
-    const indexById = state.listProjects.findIndex((proj) => proj.id === action.payload);
-    if(indexById !== -1){
-      state.listProjects[indexById] = action.payload
-    }
-   }
+    const IndexProj = state.listProjects.findIndex((proj) => proj.id === action.payload);
+    state.listProjects[IndexProj] = action.payload
+    setLocal('list_project', state.listProjects)
+   },
+   addMemProj(state, action){
+    const IndexProj = state.listProjects.findIndex((proj) => proj.id === action.payload.pId);
+    state.listProjects[IndexProj].members.push(action.payload.user)
+    setLocal('list_project', state.listProjects)
+   },
+   delMemProj(state, action){
+    const IndexProj = state.listProjects.findIndex((proj) => proj.id === action.payload.pId);
+    const IndexMem = state.listProjects[IndexProj].members.findIndex((mem) => mem.userId === action.payload.uId)
+    state.listProjects[IndexProj].members.splice(IndexMem, 1)
+    setLocal('list_project', state.listProjects)
+  },
   },
 })
 
 export default slice.reducer;
 
-export const {setListProject, delProject, setProjectCategory, updateProject} = slice.actions;
+export const {setListProject, delProject, setProjectCategory, updateProject, addMemProj, delMemProj} = slice.actions;
 
 
 //-------------------------------------------------------------------
@@ -62,7 +73,7 @@ export function handleGetListProjects() {
         headers: { TokenCybersoft: ` ${CYBERTOKEN}` },
       })  
       setLocal('list_project', resp.data.content)
-      dispatch(slice.actions.setListProject(resp.data.content));
+      dispatch(setListProject(resp.data.content));
     } catch (error) {
       console.error(error);
     }
@@ -76,7 +87,7 @@ export function handleDeleteProject(
     if (window.confirm('Are you sure to delete this project')) {
       try {
         await axios({
-          url: `/api/Project/deleteProject?projectId=${id}`,
+          url: `https://jiranew.cybersoft.edu.vn/api/Project/deleteProject?projectId=${id}`,
           method: 'delete',
           headers: {
             TokenCybersoft: ` ${CYBERTOKEN}`,
@@ -84,9 +95,9 @@ export function handleDeleteProject(
           },
         });
         dispatch(delProject(id))
-        alert('Đã xóa khóa học !')      
+        alert('Project deleted!')      
       } catch (error: any) {
-        console.error(error);
+        alert(`You don't have permission to delete this project!`);
       }
     }
   } 
@@ -94,9 +105,9 @@ export function handleDeleteProject(
 
 export function handleGetProjectDetail(
   id: string | number | undefined,
-  hanldeSetValue: (value: any) => void,
+  hanldeSetValue: (value: Projects) => void,
   ) {
-  return async (dispatch: any) => {   
+  return async () => {   
     try {
       const resp = await axios({
         url: `https://jiranew.cybersoft.edu.vn/api/Project/getProjectDetail?id=${id}`,
@@ -113,7 +124,7 @@ export function handleGetProjectDetail(
   } 
 };
 
-export function handleGetProjectCategory() {
+export function handleGetProjectCategory() {  
   return async (dispatch: Dispatch) => {
     try {
       const resp = await axios({
@@ -129,7 +140,10 @@ export function handleGetProjectCategory() {
   };
 };
 
-export function handleAddProject(value: CreateProject) {
+export function handleAddProject(
+  value: CreateProject,
+  nav: (link: string) => void
+  ) {
   return async (dispatch: any) => {   
       try {
         await axios({
@@ -141,18 +155,23 @@ export function handleAddProject(value: CreateProject) {
           },
           data: value
         });
-        alert('Create success!')      
+        alert('Create success!')     
+        nav('/projectmanagement');
       } catch (error: any) {
         console.error(error);
       }
   } 
 };
 
-export function handleUpdateProject( value: UpdateProject, project: Projects | undefined) {
+export function handleUpdateProject( 
+  value: UpdateProject, 
+  project: Projects | undefined,
+  nav: (link: string) => void
+  ) {
   return async (dispatch: any) => {   
       try {
         await axios({
-          url: `/api/Project/updateProject?projectId=${value.id}`,
+          url: `https://jiranew.cybersoft.edu.vn/api/Project/updateProject?projectId=${value.id}`,
           method: 'put',
           headers: {
             TokenCybersoft: ` ${CYBERTOKEN}`,
@@ -162,8 +181,61 @@ export function handleUpdateProject( value: UpdateProject, project: Projects | u
         });
         dispatch(updateProject({...project, ...value}))
         alert('Update success!')      
-      } catch (error: any) {
-        console.error(error);
+        nav('/projectmanagement');
+      } catch (error: any) {                
+        alert(`You not allow to edit this project!`);
       }
+  } 
+};
+
+export function handleAddUserProj(
+  pId: string | number,
+  user: User | undefined | null
+) {
+  return async (dispatch: any) => {   
+    try {
+      await axios({
+        url: `https://jiranew.cybersoft.edu.vn/api/Project/assignUserProject`,
+        method: 'post',
+        headers: {
+          TokenCybersoft: ` ${CYBERTOKEN}`,
+          Authorization: `Bearer ${getLocal('access_token')}`,
+        },
+        data: {
+          projectId: pId,
+          userId: user?.userId,
+        },
+      });
+      dispatch(addMemProj({pId, user}))
+    } catch (error: any) {
+      alert(error.response.data.message);
+    }
+  } 
+};
+
+export function handleDeleteUserProj(
+  pId: string | number,
+  uId: string | number
+) {
+  return async (dispatch: any) => {   
+    if (window.confirm('Are you sure to delete this user out of project')) {
+      try {
+        await axios({
+          url: `https://jiranew.cybersoft.edu.vn/api/Project/removeUserFromProject`,
+          method: 'post',
+          headers: {
+            TokenCybersoft: ` ${CYBERTOKEN}`,
+            Authorization: `Bearer ${getLocal('access_token')}`,
+          },
+          data: {
+            projectId: pId,
+            userId: uId,
+          },
+        });
+        dispatch(delMemProj({pId, uId}))
+      } catch (error: any) {
+        alert(error.response.data.message);
+      }
+    }
   } 
 };

@@ -1,8 +1,7 @@
 //react
 import { ChangeEvent, useState } from 'react';
-//axios
-import axios from 'axios';
 //@mui
+import CloseIcon from '@mui/icons-material/Close';
 import {
   IconButton,
   Paper,
@@ -15,11 +14,11 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 //type
 import { Member } from '~/type/projects.type';
 //hooks
-import { CYBERTOKEN } from '~/hooks/const';
+import { handleDeleteUserProj } from '~/redux/slices/projectSlides';
+import { dispatch } from '~/redux/store';
 //-------------------------------------------------------------------------------
 
 type Props = {
@@ -39,26 +38,7 @@ export default function ProjectMemberTable({ members, projId }: Props) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const handleDeleteMember = async (uId: string | number) => {
-    if (window.confirm('Are you sure to delete this user out of project')) {
-      try {
-        await axios({
-          url: `https://jiranew.cybersoft.edu.vn/api/Project/removeUserFromProject`,
-          method: 'post',
-          headers: {
-            TokenCybersoft: ` ${CYBERTOKEN}`,
-            Authorization: `Bearer `,
-          },
-          data: {
-            projectId: projId,
-            userId: uId,
-          },
-        });
-      } catch (error: any) {
-        console.error(error);
-      }
-    }
-  };
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <Typography variant="h6" sx={{ m: 2 }}>
@@ -83,7 +63,11 @@ export default function ProjectMemberTable({ members, projId }: Props) {
                   <TableCell>{row.avatar}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleDeleteMember(row.userId)}>
+                    <IconButton
+                      onClick={() =>
+                        dispatch(handleDeleteUserProj(projId, row.userId))
+                      }
+                    >
                       <CloseIcon />
                     </IconButton>
                   </TableCell>

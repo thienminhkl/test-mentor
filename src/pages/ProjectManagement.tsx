@@ -1,7 +1,6 @@
-//axios
-import axios from 'axios';
 //react
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 //@mui
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -19,15 +18,17 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-//types
-import { Projects } from '~/type/projects.type';
-import { User } from '~/type/user.type';
-//hooks
-import { CYBERTOKEN } from '~/hooks/const';
 //component
-import { useNavigate } from 'react-router-dom';
 import ProjectAddMemberPopup from '~/components/ProjectAddMemberPopup';
 import ProjectMemberPopup from '~/components/ProjectMemberPopup';
+//redux
+import {
+  handleDeleteProject,
+  handleGetListProjects,
+  handleGetProjectCategory,
+} from '~/redux/slices/projectSlides';
+import { handleGetListUser } from '~/redux/slices/userSlides';
+import { RootState, dispatch, useSelector } from '~/redux/store';
 
 //-------------------------------------------------------------------------------
 interface Column {
@@ -47,62 +48,20 @@ const columns: Column[] = [
 //-------------------------------------------------------------------------------
 
 export default function ProjectManagement() {
-  const [projects, setProject] = useState<Projects[]>([]);
-  const [listUser, setListUser] = useState<User[]>([]);
   const nav = useNavigate();
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const handleGetProject = async () => {
-    try {
-      const resp = await axios({
-        url: `https://jiranew.cybersoft.edu.vn/api/Project/getAllProject`,
-        method: 'get',
-        headers: { TokenCybersoft: ` ${CYBERTOKEN}` },
-      });
-      setProject(resp.data.content);
-    } catch (error: any) {
-      console.error(error);
-    }
-  };
-  const handleGetUser = async () => {
-    try {
-      const resp = await axios({
-        url: `https://jiranew.cybersoft.edu.vn/api/Users/getUser`,
-        method: 'get',
-        headers: {
-          TokenCybersoft: ` ${CYBERTOKEN}`,
-          Authorization: `Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhbmhjdW9uZ0BnbWFpbC5jb20iLCJuYmYiOjE2OTA3NzQ3MjcsImV4cCI6MTY5MDc3ODMyN30.RP_NLAKl6AijR3MUSS9DORn2QkZkkEc8xaSgWD3HTBc`,
-        },
-      });
-      setListUser(resp.data.content);
-    } catch (error: any) {
-      console.error(error);
-    }
-  };
-  const handleDeleteProject = async (id: string | number) => {
-    if (window.confirm('Are you sure to delete this project')) {
-      try {
-        const resp = await axios({
-          url: `/api/Project/deleteProject?projectId=${id}`,
-          method: 'delete',
-          headers: {
-            TokenCybersoft: ` ${CYBERTOKEN}`,
-            Authorization: `Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhbmhjdW9uZ0BnbWFpbC5jb20iLCJuYmYiOjE2OTA3NzQ3MjcsImV4cCI6MTY5MDc3ODMyN30.RP_NLAKl6AijR3MUSS9DORn2QkZkkEc8xaSgWD3HTBc`,
-          },
-        });
-        setListUser(resp.data.content);
-      } catch (error: any) {
-        console.error(error);
-      }
-    }
-  };
-  const handleEditProject = (id: string | number) => {
-    nav(`/editProject/${id}`);
-  };
+
+  const { listUser, userProfile } = useSelector(
+    (state: RootState) => state.user
+  );
+  const { listProjects } = useSelector((state: RootState) => state.project);
 
   useEffect(() => {
-    handleGetUser();
-    handleGetProject();
+    dispatch(handleGetListUser());
+    dispatch(handleGetListProjects());
+    dispatch(handleGetProjectCategory());
   }, []);
 
   const handleChangePage = (_: unknown, newPage: number) => {
@@ -149,10 +108,17 @@ export default function ProjectManagement() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {projects
+              {listProjects
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
-                  <TableRow hover key={row.id}>
+                  <TableRow
+                    hover
+                    key={row.id}
+                    sx={{
+                      bgcolor:
+                        row.creator.id == userProfile?.id ? 'gray' : 'white',
+                    }}
+                  >
                     <TableCell sx={{ fontSize: '1.2rem' }}>{row.id}</TableCell>
                     <TableCell sx={{ fontSize: '1.2rem' }}>
                       {row.projectName}
@@ -178,13 +144,13 @@ export default function ProjectManagement() {
                     <TableCell sx={{ fontSize: '1.2rem' }} align="right">
                       <IconButton
                         color="primary"
-                        onClick={() => handleEditProject(row.id)}
+                        onClick={() => nav(`/editProject/${row.id}`)}
                       >
                         <EditIcon />
                       </IconButton>
                       <IconButton
                         color="primary"
-                        onClick={() => handleDeleteProject(row.id)}
+                        onClick={() => dispatch(handleDeleteProject(row.id))}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -197,7 +163,7 @@ export default function ProjectManagement() {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={projects.length}
+          count={listProjects.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
