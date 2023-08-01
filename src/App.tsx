@@ -1,7 +1,10 @@
 import { Fragment, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+//templates
 import HomeTemplate from './templates/HomeTemplate';
+//components
 import ScrollToTop from './components/ScrollToTop';
+import SignTemplate from './templates/SignTemplate';
 //-------------------------------------------------------------------------------
 
 function App() {
@@ -10,7 +13,10 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
-          <Route path="login" element={<Login />}></Route>
+          <Route path="" element={<SignTemplate />}>
+            <Route index path="login" element={<Login />}></Route>
+            <Route path="register" element={<Register />}></Route>
+          </Route>
           <Route path="" element={<HomeTemplate />}>
             <Route
               index
@@ -33,6 +39,7 @@ export default App;
 
 const ProjectManagement = lazy(() => import('./pages/ProjectManagement'));
 const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
 const CreateProject = lazy(() => import('./pages/CreateProject'));
 const EditProject = lazy(() => import('./pages/EditProject'));
 const Release = lazy(() => import('./pages/Release'));
