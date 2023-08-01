@@ -30,7 +30,7 @@ export type CreateProject = {
 export type UpdateProject = {
   id:          number | string | undefined;
   projectName: string;
-  creator:     number;
+  creator:     number | undefined;
   description: string;
   categoryId:  number;
 }

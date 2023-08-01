@@ -9,12 +9,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-//axios
-import axios from 'axios';
 //react
 import { MouseEvent, useState } from 'react';
 //hooks
-import { CYBERTOKEN } from '~/hooks/const';
+import { handleAddUserProj } from '~/redux/slices/projectSlides';
+import { dispatch } from '~/redux/store';
 //type
 import { User } from '~/type/user.type';
 
@@ -38,28 +37,6 @@ export default function ProjectAddMemberPopup({ listUser, projId }: Props) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-
-  const handleAddUser = async () => {
-    if (user) {
-      try {
-        const resp = await axios({
-          url: `https://jiranew.cybersoft.edu.vn/api/Project/assignUserProject`,
-          method: 'post',
-          headers: {
-            TokenCybersoft: ` ${CYBERTOKEN}`,
-            Authorization: `Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhbmhjdW9uZ0BnbWFpbC5jb20iLCJuYmYiOjE2OTA3NzQ3MjcsImV4cCI6MTY5MDc3ODMyN30.RP_NLAKl6AijR3MUSS9DORn2QkZkkEc8xaSgWD3HTBc`,
-          },
-          data: {
-            projectId: projId,
-            userId: user.userId,
-          },
-        });
-        console.log(resp);
-      } catch (error: any) {
-        alert(error.response.data.message);
-      }
-    }
-  };
 
   return (
     <Stack direction="row" spacing={0.2}>
@@ -107,7 +84,7 @@ export default function ProjectAddMemberPopup({ listUser, projId }: Props) {
           <Button
             sx={{ width: 50 }}
             variant="contained"
-            onClick={handleAddUser}
+            onClick={() => dispatch(handleAddUserProj(projId, user))}
           >
             Add
           </Button>

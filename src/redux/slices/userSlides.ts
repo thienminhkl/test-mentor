@@ -2,19 +2,22 @@ import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { deleteLocalStrgKey, getLocal, setLocal } from '~/hooks/localStogate';
 import { CYBERTOKEN } from '~/hooks/const';
-import { LoginUser, RegisUser, UserProfile } from '~/type/user.type';
+import { LoginUser, RegisUser, User, UserProfile } from '~/type/user.type';
 //------------------------------------------------------
 
 interface ProfileData{
   userProfile: UserProfile | null,
   isLoggedIn: boolean
+  listUser: User[],
 };
 
-const profile = getLocal('profile_date');
+const profile = getLocal('profile_data');
 const isLog = Boolean(getLocal('access_token'));
+const listUser = getLocal('list_user');
 
 const initialState: ProfileData = {
   userProfile: profile,
+  listUser: listUser,
   isLoggedIn: isLog
 };
 
@@ -31,13 +34,16 @@ const slice = createSlice({
       state.userProfile = null;
       deleteLocalStrgKey('access_token');
       deleteLocalStrgKey('profile_data');
+    },
+    setListUser(state, action){
+      state.listUser = action.payload      
     }
   },
 })
 
 export default slice.reducer;
 
-export const { login, logout} = slice.actions;
+export const { login, logout, setListUser} = slice.actions;
 
 
 //-------------------------------------------------------------------
@@ -46,7 +52,7 @@ export function handleLogin(
   navigate: (nav: string)  => void,
   handleSetError:(error: any) => void
  ) {
-  return async () => {    
+  return async (dispatch: any) => {    
     try {
       const resp = await axios({
         url: 'https://jiranew.cybersoft.edu.vn/api/Users/signin',
@@ -56,7 +62,7 @@ export function handleLogin(
       });
       setLocal('access_token', resp.data.content.accessToken);   
       setLocal('profile_data', resp.data.content)
-  
+      dispatch(login( resp.data.content))
       alert('Đăng nhập thành công');
       window.location.reload();
       navigate('/projectmanagement');
@@ -85,4 +91,24 @@ export function handleRegister(
       handleSetError(error)
     }
   };
+};
+
+export const handleGetListUser =  (
+) => {
+  return async (dispatch: any) => {  
+    try {
+      const resp = await axios({
+        url: `https://jiranew.cybersoft.edu.vn/api/Users/getUser`,
+        method: 'get',
+        headers: {
+          TokenCybersoft: ` ${CYBERTOKEN}`,
+          Authorization: `Bearer ${getLocal('access_token')}`,
+        },
+      });
+      setLocal('list_user', resp.data.content)
+      dispatch(setListUser(resp.data.content));
+    } catch (error: any) {
+      console.error(error);
+    }
+  }  
 };

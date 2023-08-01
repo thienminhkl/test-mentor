@@ -14,12 +14,12 @@ import RHFTextField from '~/hooks/RHFTextField';
 //redux
 import {
   handleAddProject,
-  handleGetProjectCategory,
   handleUpdateProject,
 } from '~/redux/slices/projectSlides';
 import { dispatch, useSelector } from '~/redux/store';
 //type
 import { Projects } from '~/type/projects.type';
+import { useNavigate } from 'react-router-dom';
 //-------------------------------------------------------------------------------
 
 type Props = {
@@ -36,7 +36,8 @@ type FormValuesProps = {
 //-------------------------------------------------------------------------------
 
 export default function CreateProjectForm({ isEdit, currentProject }: Props) {
-  const categories = useSelector((state) => state.project.projectCategory);
+  const nav = useNavigate();
+  const { projectCategory } = useSelector((state) => state.project);
 
   const NewProjectSchema = Yup.object().shape({
     projectName: Yup.string().required('Name is required'),
@@ -48,7 +49,7 @@ export default function CreateProjectForm({ isEdit, currentProject }: Props) {
     () => ({
       projectName: currentProject?.projectName || '',
       description: currentProject?.description || '',
-      categoryId: currentProject?.categoryId || categories[0].id,
+      categoryId: currentProject?.categoryId || projectCategory[0].id,
       alias: currentProject?.alias || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,23 +77,19 @@ export default function CreateProjectForm({ isEdit, currentProject }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentProject]);
 
-  useEffect(() => {
-    dispatch(handleGetProjectCategory());
-  }, []);
-
   const onSubmit = async (data: FormValuesProps) => {
     const createData = { ...data, alias: data.projectName };
     const updateData = {
       id: currentProject?.id,
       projectName: data.projectName,
-      creator: 0,
+      creator: currentProject?.creator.id,
       description: data.description,
       categoryId: data.categoryId,
     };
     if (isEdit) {
-      dispatch(handleUpdateProject(updateData, currentProject));
+      dispatch(handleUpdateProject(updateData, currentProject, nav));
     } else {
-      dispatch(handleAddProject(createData));
+      dispatch(handleAddProject(createData, nav));
     }
   };
 
@@ -110,7 +107,7 @@ export default function CreateProjectForm({ isEdit, currentProject }: Props) {
             <RHFEditor name="description" />
           </Stack>
           <RHFSelect native name="categoryId">
-            {categories.map((option) => (
+            {projectCategory.map((option) => (
               <option key={option.id} value={option.id}>
                 {option.projectCategoryName}
               </option>
