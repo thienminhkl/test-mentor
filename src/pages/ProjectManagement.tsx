@@ -29,6 +29,7 @@ import ProjectAddMemberPopup from '~/components/ProjectAddMemberPopup';
 import ProjectMemberPopup from '~/components/ProjectMemberPopup';
 import { dispatch } from '~/redux/store';
 import { handleGetListProjects } from '~/redux/slices/projectSlides';
+import { useNavigate } from 'react-router-dom';
 
 //-------------------------------------------------------------------------------
 interface Column {
@@ -50,7 +51,7 @@ const columns: Column[] = [
 export default function ProjectManagement() {
   const [projects, setProject] = useState<Projects[]>([]);
   const [listUser, setListUser] = useState<User[]>([]);
-
+  const nav = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const handleGetProject = async () => {
@@ -80,7 +81,6 @@ export default function ProjectManagement() {
       console.error(error);
     }
   };
-
   const handleDeleteProject = async (id: string | number) => {
     if (window.confirm('Are you sure to delete this project')) {
       try {
@@ -97,6 +97,9 @@ export default function ProjectManagement() {
         console.error(error);
       }
     }
+  };
+  const handleEditProject = (id: string | number) => {
+    nav(`/editProject/${id}`);
   };
 
   useEffect(() => {
@@ -175,7 +178,10 @@ export default function ProjectManagement() {
                       </Stack>
                     </TableCell>
                     <TableCell sx={{ fontSize: '1.2rem' }} align="right">
-                      <IconButton color="primary">
+                      <IconButton
+                        color="primary"
+                        onClick={() => handleEditProject(row.id)}
+                      >
                         <EditIcon />
                       </IconButton>
                       <IconButton

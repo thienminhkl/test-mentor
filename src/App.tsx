@@ -19,7 +19,9 @@ function App() {
             />
             <Route path="release" element={<Release />} />
             <Route path="createProject" element={<CreateProject />} />
-            <Route path="editProject:id" element={<EditProject />} />
+            <Route path="editProject">
+              <Route path=":id" element={<EditProject />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

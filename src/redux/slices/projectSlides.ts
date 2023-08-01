@@ -89,6 +89,27 @@ export function handleDeleteProject(
   } 
 };
 
+export function handleGetProjectDetail(
+  id: string | number | undefined,
+  hanldeSetValue: (value: any) => void,
+  ) {
+  return async (dispatch: any) => {   
+    try {
+      const resp = await axios({
+        url: `/api/Project/getProjectDetail?id=${id}`,
+        method: 'get',
+        headers: {
+          TokenCybersoft: ` ${CYBERTOKEN}`,
+          Authorization: `Bearer ${getLocal('access_token')}`,
+        },
+      });
+      hanldeSetValue(resp.data.content)
+    } catch (error: any) {
+      console.error(error);
+    }
+  } 
+};
+
 export function handleGetProjectCategory() {
   return async (dispatch: Dispatch) => {
     try {
