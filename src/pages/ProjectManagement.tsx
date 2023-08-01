@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 //@mui
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import PreviewIcon from '@mui/icons-material/Preview';
 import {
   Button,
   IconButton,
@@ -142,6 +143,12 @@ export default function ProjectManagement() {
                       </Stack>
                     </TableCell>
                     <TableCell sx={{ fontSize: '1.2rem' }} align="right">
+                      <IconButton
+                        color="primary"
+                        onClick={() => nav(`/projectDetails/${row.id}`)}
+                      >
+                        <PreviewIcon />
+                      </IconButton>
                       <IconButton
                         color="primary"
                         onClick={() => nav(`/editProject/${row.id}`)}

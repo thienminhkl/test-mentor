@@ -81,7 +81,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const listSidebar: SideBar[] = [
-  { name: 'Create Task', icon: <Add />, href: '/' },
+  { name: 'Create Task', icon: <Add />, href: '/createTask' },
   { name: 'Search', icon: <Search />, href: '/' },
 ];
 const listSubSidebarU: SideBar[] = [
