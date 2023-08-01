@@ -144,7 +144,7 @@ export function handleAddProject(
   value: CreateProject,
   nav: (link: string) => void
   ) {
-  return async (dispatch: any) => {   
+  return async () => {   
       try {
         await axios({
           url: `https://jiranew.cybersoft.edu.vn/api/Project/createProjectAuthorize`,
