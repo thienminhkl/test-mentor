@@ -3,6 +3,8 @@ import axios from 'axios';
 //react
 import { useEffect, useState } from 'react';
 //@mui
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Button,
   IconButton,
@@ -17,19 +19,15 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 //types
 import { Projects } from '~/type/projects.type';
 import { User } from '~/type/user.type';
 //hooks
 import { CYBERTOKEN } from '~/hooks/const';
 //component
+import { useNavigate } from 'react-router-dom';
 import ProjectAddMemberPopup from '~/components/ProjectAddMemberPopup';
 import ProjectMemberPopup from '~/components/ProjectMemberPopup';
-import { dispatch } from '~/redux/store';
-import { handleGetListProjects } from '~/redux/slices/projectSlides';
-import { useNavigate } from 'react-router-dom';
 
 //-------------------------------------------------------------------------------
 interface Column {

@@ -1,20 +1,26 @@
+import * as Yup from 'yup';
+//@hookform
 import { yupResolver } from '@hookform/resolvers/yup';
+//@mui
 import { Button, Card, Stack, Typography } from '@mui/material';
+//react
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
+//hooks
 import FormProvider from '~/hooks/FormProvider';
 import RHFEditor from '~/hooks/RHFEditor';
 import { RHFSelect } from '~/hooks/RHFSelect';
 import RHFTextField from '~/hooks/RHFTextField';
+//redux
 import {
   handleAddProject,
   handleGetProjectCategory,
   handleUpdateProject,
 } from '~/redux/slices/projectSlides';
 import { dispatch, useSelector } from '~/redux/store';
+//type
 import { Projects } from '~/type/projects.type';
+//-------------------------------------------------------------------------------
 
 type Props = {
   isEdit?: boolean;
@@ -27,6 +33,7 @@ type FormValuesProps = {
   categoryId: number;
   alias?: string;
 };
+//-------------------------------------------------------------------------------
 
 export default function CreateProjectForm({ isEdit, currentProject }: Props) {
   const categories = useSelector((state) => state.project.projectCategory);

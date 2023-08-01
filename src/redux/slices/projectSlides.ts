@@ -1,11 +1,14 @@
-import { Dispatch, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+//@ruduxjs
+import { Dispatch, createSlice } from '@reduxjs/toolkit';
+//hooks
 import { CYBERTOKEN } from '~/hooks/const';
 import { getLocal, setLocal } from '~/hooks/localStogate';
+//type
 import { Category } from '~/type/category.type';
 import { CreateProject, Projects, UpdateProject } from '~/type/projects.type';
-
 //------------------------------------------------------
+
 interface ProjectList{
   listProjects: Projects[],
   projectCategory: Category[] ,
