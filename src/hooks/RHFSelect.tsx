@@ -51,7 +51,8 @@ export function RHFSelect({
                 sx: {
                   ...(!native && {
                     px: 1,
-                    maxHeight: typeof maxHeight === 'number' ? maxHeight : 'unset',
+                    maxHeight:
+                      typeof maxHeight === 'number' ? maxHeight : 'unset',
                     '& .MuiMenuItem-root': {
                       px: 1,
                       borderRadius: 0.75,
@@ -84,10 +85,9 @@ type RHFMultiSelectProps = SelectProps & {
   checkbox?: boolean;
   placeholder?: string;
   helperText?: React.ReactNode;
-  options: {
-    label: string;
-    value: string;
-  }[];
+  options: any[];
+  optionvalue: string;
+  optionlabel: string;
 };
 
 export function RHFMultiSelect({
@@ -98,13 +98,17 @@ export function RHFMultiSelect({
   checkbox,
   placeholder,
   helperText,
+  optionvalue,
+  optionlabel,
   sx,
   ...other
 }: RHFMultiSelectProps) {
   const { control } = useFormContext();
 
   const renderValues = (selectedIds: string[]) => {
-    const selectedItems = options.filter((item) => selectedIds.includes(item.value));
+    const selectedItems = options.filter((item) =>
+      selectedIds.includes(item[`${optionvalue}`])
+    );
 
     if (!selectedItems.length && placeholder) {
       return (
@@ -118,13 +122,17 @@ export function RHFMultiSelect({
       return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
           {selectedItems.map((item) => (
-            <Chip key={item.value} size="small" label={item.label} />
+            <Chip
+              key={item[`${optionvalue}`]}
+              size="small"
+              label={item[`${optionlabel}`]}
+            />
           ))}
         </Box>
       );
     }
 
-    return selectedItems.map((item) => item.label).join(', ');
+    return selectedItems.map((item) => item[`${optionlabel}`]).join(', ');
   };
 
   return (
@@ -165,12 +173,12 @@ export function RHFMultiSelect({
             )}
 
             {options.map((option) => {
-              const selected = field.value.includes(option.value);
+              const selected = field.value.includes(option[`${optionvalue}`]);
 
               return (
                 <MenuItem
-                  key={option.value}
-                  value={option.value}
+                  key={option[`${optionvalue}`]}
+                  value={option[`${optionvalue}`]}
                   sx={{
                     py: 1,
                     px: 2,
@@ -184,16 +192,20 @@ export function RHFMultiSelect({
                     }),
                   }}
                 >
-                  {checkbox && <Checkbox disableRipple size="small" checked={selected} />}
+                  {checkbox && (
+                    <Checkbox disableRipple size="small" checked={selected} />
+                  )}
 
-                  {option.label}
+                  {option[`${optionlabel}`]}
                 </MenuItem>
               );
             })}
           </Select>
 
           {(!!error || helperText) && (
-            <FormHelperText error={!!error}>{error ? error?.message : helperText}</FormHelperText>
+            <FormHelperText error={!!error}>
+              {error ? error?.message : helperText}
+            </FormHelperText>
           )}
         </FormControl>
       )}

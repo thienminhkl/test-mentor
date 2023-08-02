@@ -7,20 +7,24 @@ import { getLocal, setLocal } from '~/hooks/localStogate';
 //type
 import { Category } from '~/type/category.type';
 import { CreateProject, Projects, UpdateProject } from '~/type/projects.type';
+import { ProjectDetail } from '~/type/task.type';
 import { User } from '~/type/user.type';
 //------------------------------------------------------
 
 interface ProjectList{
   listProjects: Projects[],
   projectCategory: Category[] ,
+  projectDetails: ProjectDetail,
 };
 
 const listProject = getLocal('list_project');
 const listCategory = getLocal('list_category');
+const projectDetail = getLocal('project_detail');
 
 const initialState: ProjectList = {
   listProjects: listProject,
   projectCategory: listCategory,
+  projectDetails: projectDetail,
 };
 
 const slice = createSlice({
@@ -54,14 +58,24 @@ const slice = createSlice({
     state.listProjects[IndexProj].members.splice(IndexMem, 1)
     setLocal('list_project', state.listProjects)
   },
+  getProjDetail(state, action){
+    state.projectDetails = action.payload
+    setLocal('project_detail',action.payload)
+  }
   },
 })
 
 export default slice.reducer;
 
-export const {setListProject, delProject, setProjectCategory, updateProject, addMemProj, delMemProj} = slice.actions;
-
-
+export const {
+  setListProject, 
+  delProject, 
+  setProjectCategory, 
+  updateProject, 
+  addMemProj, 
+  delMemProj,
+  getProjDetail
+} = slice.actions;
 //-------------------------------------------------------------------
 
 export function handleGetListProjects() {
@@ -105,9 +119,9 @@ export function handleDeleteProject(
 
 export function handleGetProjectDetail(
   id: string | number | undefined,
-  hanldeSetValue: (value: Projects) => void,
+  hanldeSetValue?: (value: Projects) => void ,
   ) {
-  return async () => {   
+  return async (dispatch: any) => {   
     try {
       const resp = await axios({
         url: `https://jiranew.cybersoft.edu.vn/api/Project/getProjectDetail?id=${id}`,
@@ -117,7 +131,10 @@ export function handleGetProjectDetail(
           Authorization: `Bearer ${getLocal('access_token')}`,
         },
       });
-      hanldeSetValue(resp.data.content)
+      dispatch(getProjDetail(resp.data.content))
+      if(hanldeSetValue){
+        hanldeSetValue(resp.data.content)
+      }
     } catch (error: any) {
       console.error(error);
     }

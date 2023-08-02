@@ -4,17 +4,17 @@ import { Outlet, useNavigate } from 'react-router-dom';
 //@mui
 import {
   Add,
+  AllInbox,
+  Article,
   ChevronLeft,
   ChevronRight,
-  Search,
   CreditCard,
-  Settings,
-  LocalShipping,
   DensityLarge,
-  Article,
+  LocalShipping,
   NearMe,
-  AllInbox,
   Queue,
+  Search,
+  Settings,
 } from '@mui/icons-material';
 import {
   Avatar,
@@ -35,10 +35,10 @@ import { CSSObject, styled } from '@mui/material/styles';
 //type
 import { SideBar } from '~/type/sidebar.type';
 //component
-import LoadingScreen from '~/components/LoadingScreen';
 import { useSelector } from 'react-redux';
-import { RootState, dispatch } from '~/redux/store';
+import LoadingScreen from '~/components/LoadingScreen';
 import { logout } from '~/redux/slices/userSlides';
+import { RootState, dispatch } from '~/redux/store';
 //-------------------------------------------------------------------------------
 const drawerWidth = 200;
 
@@ -81,7 +81,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const listSidebar: SideBar[] = [
-  { name: 'Create Task', icon: <Add />, href: '/' },
+  { name: 'Create Task', icon: <Add />, href: '/createTask' },
   { name: 'Search', icon: <Search />, href: '/' },
 ];
 const listSubSidebarU: SideBar[] = [
