@@ -20,11 +20,69 @@ interface ProjectList{
 const listProject = getLocal('list_project');
 const listCategory = getLocal('list_category');
 const projectDetail = getLocal('project_detail');
+const projDetailDefault = {
+  lstTask: [
+    {
+      lstTaskDeTail: [
+        {
+          priorityTask: { priorityId: 0, priority: '' },
+          taskTypeDetail: { id: 0, taskType: '' },
+          assigness: [
+            {
+              id: 0,
+              avatar: '0',
+              name: '',
+              alias: '',
+            },
+          ],
+          lstComment: [
+            {
+              id: 0,
+              idUser: 0,
+              name: '',
+              avatar: '',
+              commentContent: '',
+            },
+          ],
+          taskId: 0,
+          taskName: '',
+          alias: '',
+          description: '',
+          statusId: '',
+          originalEstimate: 0,
+          timeTrackingSpent: 0,
+          timeTrackingRemaining: 0,
+          typeId: 0,
+          priorityId: 0,
+          projectId: 0,
+        },
+      ],
+      statusId: '',
+      statusName: '',
+      alias: '',
+    },
+  ],
+  members: [
+    {
+      userId: 0,
+      name: '',
+      avatar: '',
+      email: null,
+      phoneNumber: null,
+    },
+  ],
+  creator: { id: 0, name: '0' },
+  id: 0,
+  projectName: '0',
+  description: '',
+  projectCategory: { id: 0, name: '' },
+  alias: '',
+};
 
 const initialState: ProjectList = {
   listProjects: listProject || [],
   projectCategory: listCategory || [],
-  projectDetails: projectDetail,
+  projectDetails: projectDetail || projDetailDefault,
 };
 
 const slice = createSlice({

@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
-import { deleteLocalStrgKey, getLocal, setLocal } from '~/hooks/localStogate';
+import axios from 'axios';
 import { CYBERTOKEN } from '~/hooks/const';
+import { deleteLocalStrgKey, getLocal, setLocal } from '~/hooks/localStogate';
 import { LoginUser, RegisUser, User, UserProfile } from '~/type/user.type';
 //------------------------------------------------------
 
@@ -17,7 +17,7 @@ const listUser = getLocal('list_user');
 
 const initialState: ProfileData = {
   userProfile: profile,
-  listUser: listUser,
+  listUser: listUser || [],
   isLoggedIn: isLog
 };
 
