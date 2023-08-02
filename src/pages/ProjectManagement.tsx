@@ -59,6 +59,8 @@ export default function ProjectManagement() {
   );
   const { listProjects } = useSelector((state: RootState) => state.project);
 
+  console.log(listProjects);
+
   useEffect(() => {
     dispatch(handleGetListUser());
     dispatch(handleGetListProjects());

@@ -22,8 +22,8 @@ const listCategory = getLocal('list_category');
 const projectDetail = getLocal('project_detail');
 
 const initialState: ProjectList = {
-  listProjects: listProject,
-  projectCategory: listCategory,
+  listProjects: listProject || [],
+  projectCategory: listCategory || [],
   projectDetails: projectDetail,
 };
 
