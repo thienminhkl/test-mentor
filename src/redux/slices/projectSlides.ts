@@ -7,8 +7,8 @@ import { getLocal, setLocal } from '~/hooks/localStogate';
 //type
 import { Category } from '~/type/category.type';
 import { CreateProject, Projects, UpdateProject } from '~/type/projects.type';
-import { User } from '~/type/user.type';
 import { ProjectDetail } from '~/type/task.type';
+import { User } from '~/type/user.type';
 //------------------------------------------------------
 
 interface ProjectList{
@@ -76,8 +76,6 @@ export const {
   delMemProj,
   getProjDetail
 } = slice.actions;
-
-
 //-------------------------------------------------------------------
 
 export function handleGetListProjects() {

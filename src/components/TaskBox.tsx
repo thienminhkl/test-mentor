@@ -18,9 +18,9 @@ function TaskBox({ status, listTask }: Props) {
       <Stack p={2} bgcolor={'grey'}>
         <Typography variant="h6">{status}</Typography>
       </Stack>
-      <Stack spacing={0.5} my={1} bgcolor={'#bbbbbb'}>
+      <Stack spacing={0.5} my={1}>
         {listTask.map((task) => (
-          <Stack key={task.taskId} p={2} spacing={2}>
+          <Stack key={task.taskId} p={2} spacing={2} bgcolor={'#bbbbbb'}>
             <Stack
               direction={'row'}
               justifyContent={'space-between'}

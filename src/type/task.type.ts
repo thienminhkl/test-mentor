@@ -84,3 +84,23 @@ export type Member = {
   email:       null;
   phoneNumber: null;
 }
+
+export type Priority = {
+  priorityId:  number;
+  priority:    string;
+  description: string;
+  deleted:     boolean;
+  alias:       string;
+}
+
+export type Status = {
+  statusId:   string;
+  statusName: string;
+  alias:      string;
+  deleted:    string;
+}
+
+export type TaskType = {
+  id:       number;
+  taskType: string;
+}
