@@ -23,7 +23,6 @@ function App() {
               path="projectmanagement"
               element={<ProjectManagement />}
             />
-            <Route path="release" element={<Release />} />
             <Route path="projectDetails">
               <Route path=":id" element={<ProjectDetail />} />
             </Route>
@@ -36,6 +35,7 @@ function App() {
               <Route path=":id" element={<EditTask />} />
             </Route>
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </Fragment>
@@ -49,7 +49,7 @@ const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const CreateProject = lazy(() => import('./pages/CreateProject'));
 const EditProject = lazy(() => import('./pages/EditProject'));
-const Release = lazy(() => import('./pages/Release'));
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const CreateTask = lazy(() => import('./pages/CreateTask'));
 const EditTask = lazy(() => import('./pages/EditTask'));
+const NotFound = lazy(() => import('./pages/NotFound'));
