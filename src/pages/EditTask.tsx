@@ -15,7 +15,7 @@ function EditTask() {
   const dispatch = useDispatch();
 
   const { id } = useParams();
-  const [task, setTask] = useState<TaskForm>();
+  const [task, setTask] = useState<TaskForm & { taskId: string }>();
 
   useEffect(() => {
     dispatch(handleGetTaskDetail(id, setTask));

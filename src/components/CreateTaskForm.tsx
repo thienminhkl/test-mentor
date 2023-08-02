@@ -23,11 +23,6 @@ import {
   handleUpdateTask,
 } from '~/redux/slices/taskSlides';
 import { Priority, Status, TaskForm, TaskType } from '~/type/task.type';
-import { Projects } from '~/type/projects.type';
-import { User } from '~/type/user.type';
-import RHFSlider from '~/hooks/RHFSlider';
-import { handleAddProject } from '~/redux/slices/projectSlides';
-
 //-------------------------------------------------------------------------------
 
 type Props = {

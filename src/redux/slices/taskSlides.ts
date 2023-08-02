@@ -16,7 +16,7 @@ export default slice.reducer;
 
 export function handleGetTaskDetail(
   id: string | number | undefined,
-  hanldeSetValue: (value: TaskForm) => void ,
+  hanldeSetValue: (value: TaskForm & { taskId: string; }) => void ,
   ) {
   return async () => {   
     try {
