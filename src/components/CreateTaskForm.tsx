@@ -45,18 +45,22 @@ export default function CreateTaskForm({ isEdit, currentTask }: Props) {
     priorityId: Yup.number().required('Priority is required!'),
     typeId: Yup.number().required('Type is required!'),
     listUserAsign: Yup.array().required('Assignees user!'),
-    timeTrackingSpent: Yup.number().required('Status is required!'),
-    timeTrackingRemaining: Yup.number().required('Status is required!'),
-    originalEstimate: Yup.number().required('Status is required!'),
-    description: Yup.string().required('Status is required!'),
+    timeTrackingSpent: Yup.number().required(
+      'Time Tracking Spent is required!'
+    ),
+    timeTrackingRemaining: Yup.number().required(
+      'Time Tracking Remaining is required!'
+    ),
+    originalEstimate: Yup.number().required('Original Estimate is required!'),
+    description: Yup.string().required('Description is required!'),
   });
   const defaultValues = useMemo(
     () => ({
       projectId: currentTask?.projectId || 0,
       taskName: currentTask?.taskName || '',
-      statusId: currentTask?.statusId || '',
-      priorityId: currentTask?.priorityId || 0,
-      typeId: currentTask?.typeId || 0,
+      statusId: currentTask?.statusId || '1',
+      priorityId: currentTask?.priorityId || 1,
+      typeId: currentTask?.typeId || 1,
       listUserAsign: currentTask?.listUserAsign || [],
       timeTrackingSpent: currentTask?.timeTrackingSpent || 0,
       timeTrackingRemaining: currentTask?.timeTrackingRemaining || 0,

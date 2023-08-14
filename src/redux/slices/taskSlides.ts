@@ -110,7 +110,7 @@ export function handleCreateTask(
         alert('Create success!')     
         nav('/projectmanagement');
       } catch (error: any) {
-        console.error(error);
+        alert(error.response.data.content);
       }
   } 
 };
@@ -135,7 +135,7 @@ export function handleUpdateTask(
         nav('/projectmanagement');
       } catch (error: any) {
         console.error(error);
-        alert(error.response.data.message);
+        alert(error.response.data.content);
       }
   } 
 };
